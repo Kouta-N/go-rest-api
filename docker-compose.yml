@@ -4,9 +4,9 @@ services:
     ports:
       - 5434:5432
     environment:
-      POSTGRES_USER: postgressuser
-      POSTGRES_PASSWORD: postgresspassword
-      POSTGRES_DB: postgressuser
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: postgres
     restart: always
     networks:
       - lesson
