@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
 )
 
@@ -58,6 +58,34 @@ func (tc *taskController) CreateTask(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, taskRes)
+}
+
+func (tc *taskController) UpdateTask(c echo.Context) error {
+	userId := GetUserIdFromJWT(c)
+	id := c.Param("taskId")
+	taskId, _ := strconv.Atoi(id)
+
+	task := model.Task{}
+	if err := c.Bind(&task); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	taskRes, err := tc.tu.UpdateTask(task, userId, uint(taskId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.JSON(http.StatusOK, taskRes)
+}
+
+func (tc *taskController) DeleteTask(c echo.Context) error {
+	userId := GetUserIdFromJWT(c)
+	id := c.Param("taskId")
+	taskId, _ := strconv.Atoi(id)
+
+	err := tc.tu.DeleteTask(userId, uint(taskId))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	return c.NoContent(http.StatusNoContent)
 }
 
 func GetUserIdFromJWT(c echo.Context) uint {
