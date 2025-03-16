@@ -1,5 +1,8 @@
 package router
 
+// ルーターはCORS,Cookie、エンドポイントの設定のみで不要な変更を行わないようにする
+// コントローラーでエンドポイントごとの処理を行う（依存性逆転）
+
 import (
 	"go-rest-api/controller"
 	"net/http"
